@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 5  // Maximum number of tasks
+
+class TaskScheduler {
+    string tasks[MAX];  // Array to store tasks
+    int front, rear;
+
+public:
+    TaskScheduler() {
+        front = -1;
+        rear = -1;
+    }
+
+    void addTask() {
+        if (rear == MAX - 1) {
+            cout << "Task list is full! Complete a task before adding more.\n";
+            return;
+        }
+        if (front == -1) front = 0;
+        cout << "Enter task: ";
+        cin.ignore();
+        getline(cin, tasks[++rear]);
+        cout << "Task added successfully!\n";
+    }
+
+    void viewTasks() {
+        if (front == -1 || front > rear) {
+            cout << "No tasks pending!\n";
+            return;
+        }
+        cout << "Pending Tasks:\n";
+        for (int i = front; i <= rear; i++) {
+            cout << "- " << tasks[i] << "\n";
+        }
+    }
+
+    void completeTask() {
+        if (front == -1 || front > rear) {
+            cout << "No tasks to complete!\n";
+            return;
+        }
+        cout << "Completed Task: " << tasks[front++] << "\n";
+        if (front > rear) {  // Reset when queue becomes empty
+            front = -1;
+            rear = -1;
+        }
+    }
+};
+
+int main() {
+    TaskScheduler scheduler;
+    int choice;
+
+    do {
+        cout << "\nTask Scheduler\n";
+        cout << "1. Add Task\n2. View Tasks\n3. Complete Task\n4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: scheduler.addTask(); break;
+            case 2: scheduler.viewTasks(); break;
+            case 3: scheduler.completeTask(); break;
+            case 4: cout << "Exiting...\n"; break;
+            default: cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
