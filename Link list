@@ -1,0 +1,106 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Node structure for the linked list
+struct Task {
+    string name;
+    Task* next;
+};
+
+class TaskScheduler {
+    Task* head;
+
+public:
+    TaskScheduler() {
+        head = nullptr;
+    }
+
+    // Add task at the end of the list
+    void addTask(string taskName) {
+        Task* newTask = new Task;
+        newTask->name = taskName;
+        newTask->next = nullptr;
+
+        if (head == nullptr) {
+            head = newTask;
+        } else {
+            Task* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newTask;
+        }
+        cout << "Task added successfully!\n";
+    }
+
+    // View all tasks
+    void viewTasks() {
+        if (head == nullptr) {
+            cout << "No pending tasks!\n";
+            return;
+        }
+        cout << "Pending Tasks:\n";
+        Task* temp = head;
+        while (temp != nullptr) {
+            cout << "- " << temp->name << "\n";
+            temp = temp->next;
+        }
+    }
+
+    // Complete (remove) the first task
+    void completeTask() {
+        if (head == nullptr) {
+            cout << "No tasks to complete!\n";
+            return;
+        }
+        Task* temp = head;
+        head = head->next;
+        cout << "Completed Task: " << temp->name << "\n";
+        delete temp;
+    }
+
+    // Destructor to free memory
+    ~TaskScheduler() {
+        while (head != nullptr) {
+            Task* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    TaskScheduler scheduler;
+    int choice;
+    string task;
+
+    do {
+        cout << "\nTask Scheduler (Linked List)\n";
+        cout << "1. Add Task\n2. View Tasks\n3. Complete Task\n4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore();
+
+        switch (choice) {
+            case 1:
+                cout << "Enter task name: ";
+                getline(cin, task);
+                scheduler.addTask(task);
+                break;
+            case 2:
+                scheduler.viewTasks();
+                break;
+            case 3:
+                scheduler.completeTask();
+                break;
+            case 4:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 4);
+
+    return 0;
+}
