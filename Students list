@@ -1,0 +1,150 @@
+#include <iostream>
+using namespace std;
+
+// Node structure for the linked list
+struct Student {
+    int rollNo;
+    int marks;
+    Student* next;
+};
+
+class StudentList {
+    Student* head;
+
+public:
+    StudentList() {
+        head = nullptr;
+    }
+
+    // Add student at the end of the list
+    void addStudent(int rollNo, int marks) {
+        Student* newStudent = new Student;
+        newStudent->rollNo = rollNo;
+        newStudent->marks = marks;
+        newStudent->next = nullptr;
+
+        if (head == nullptr) {
+            head = newStudent;
+        } else {
+            Student* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newStudent;
+        }
+        cout << "Student added successfully!\n";
+    }
+
+    // View all students
+    void viewStudents() {
+        if (head == nullptr) {
+            cout << "No students in the list!\n";
+            return;
+        }
+        cout << "\nStudent List:\n";
+        Student* temp = head;
+        while (temp != nullptr) {
+            cout << "Roll No: " << temp->rollNo << ", Marks: " << temp->marks << "\n";
+            temp = temp->next;
+        }
+    }
+
+    // Search for a student by roll number
+    void searchStudent(int rollNo) {
+        Student* temp = head;
+        while (temp != nullptr) {
+            if (temp->rollNo == rollNo) {
+                cout << "\nStudent Found:\n";
+                cout << "Roll No: " << temp->rollNo << ", Marks: " << temp->marks << "\n";
+                return;
+            }
+            temp = temp->next;
+        }
+        cout << "Student with Roll No " << rollNo << " not found!\n";
+    }
+
+    // Delete a student by roll number
+    void deleteStudent(int rollNo) {
+        if (head == nullptr) {
+            cout << "No students in the list!\n";
+            return;
+        }
+
+        Student* temp = head;
+        Student* prev = nullptr;
+
+        // Check if the student to delete is at the head
+        if (temp != nullptr && temp->rollNo == rollNo) {
+            head = temp->next;
+            delete temp;
+            cout << "Student with Roll No " << rollNo << " deleted successfully!\n";
+            return;
+        }
+
+        // Traverse the list to find the student
+        while (temp != nullptr && temp->rollNo != rollNo) {
+            prev = temp;
+            temp = temp->next;
+        }
+
+        if (temp == nullptr) {
+            cout << "Student with Roll No " << rollNo << " not found!\n";
+            return;
+        }
+
+        prev->next = temp->next;
+        delete temp;
+        cout << "Student deleted successfully!\n";
+    }
+
+    // Destructor to free memory
+    ~StudentList() {
+        while (head != nullptr) {
+            Student* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
+};
+
+int main() {
+    StudentList studentList;
+    int choice, rollNo, marks;
+
+    do {
+        cout << "\nStudent Management System (Linked List)\n";
+        cout << "1. Add Student\n2. View Students\n3. Search Student\n4. Delete Student\n5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter Roll No: ";
+                cin >> rollNo;
+                cout << "Enter Marks: ";
+                cin >> marks;
+                studentList.addStudent(rollNo, marks);
+                break;
+            case 2:
+                studentList.viewStudents();
+                break;
+            case 3:
+                cout << "Enter Roll No to search: ";
+                cin >> rollNo;
+                studentList.searchStudent(rollNo);
+                break;
+            case 4:
+                cout << "Enter Roll No to delete: ";
+                cin >> rollNo;
+                studentList.deleteStudent(rollNo);
+                break;
+            case 5:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
