@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+
+#define MAX 5  // Maximum queue size
+
+struct Customer {
+    int ticketNo;
+};
+
+class TicketQueue {
+    Customer queue[MAX];  
+    int front, rear;
+
+public:
+    TicketQueue() {
+        front = -1;
+        rear = -1;
+    }
+
+    // Enqueue: Add a customer to the queue
+    void enqueue(int ticketNo) {
+        if (rear == MAX - 1) {
+            cout << "Queue Full! No more tickets available.\n";
+            return;
+        }
+        if (front == -1) front = 0;  // Initialize front if first element
+        rear++;
+        queue[rear].ticketNo = ticketNo;
+        cout << "Ticket " << ticketNo << " reserved successfully!\n";
+    }
+
+    // Dequeue: Serve the first customer in the queue
+    void dequeue() {
+        if (front == -1 || front > rear) {
+            cout << "No customers in the queue!\n";
+            return;
+        }
+        cout << "Serving customer with Ticket No: " << queue[front].ticketNo << "\n";
+        front++;
+        if (front > rear) {  // Reset queue when empty
+            front = rear = -1;
+        }
+    }
+
+    // Display the queue
+    void display() {
+        if (front == -1 || front > rear) {
+            cout << "No customers in the queue!\n";
+            return;
+        }
+        cout << "\nCurrent Ticket Queue:\n";
+        for (int i = front; i <= rear; i++) {
+            cout << "Ticket No: " << queue[i].ticketNo << "\n";
+        }
+    }
+
+    // Check if queue is empty
+    bool isEmpty() {
+        return (front == -1 || front > rear);
+    }
+};
+
+int main() {
+    TicketQueue ticketQueue;
+    int choice, ticketNo = 100;  // Starting ticket number
+
+    do {
+        cout << "\nTicket Reservation System (Queue)\n";
+        cout << "1. Reserve Ticket\n2. Serve Customer\n3. View Queue\n4. Check if Queue is Empty\n5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                ticketQueue.enqueue(ticketNo++);
+                break;
+            case 2:
+                ticketQueue.dequeue();
+                break;
+            case 3:
+                ticketQueue.display();
+                break;
+            case 4:
+                if (ticketQueue.isEmpty()) {
+                    cout << "The queue is empty.\n";
+                } else {
+                    cout << "The queue is not empty.\n";
+                }
+                break;
+            case 5:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 5);
+
+    return 0;
+}
