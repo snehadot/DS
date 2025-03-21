@@ -1,0 +1,125 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int coeff, exp;
+    Node* next;
+
+    // Constructor for Node
+    Node(int c, int e) {
+        coeff = c;
+        exp = e;
+        next = nullptr;
+    }
+};
+
+class Polynomial {
+private:
+    Node* head;
+
+public:
+    // Constructor for Polynomial
+    Polynomial() {
+        head = nullptr;
+    }
+
+    // Create polynomial
+    void create() {
+        int n, c, e;
+        cout << "Enter the number of terms: ";
+        cin >> n;
+
+        for (int i = 0; i < n; ++i) {
+            cout << "Enter coefficient and exponent: ";
+            cin >> c >> e;
+
+            Node* newNode = new Node(c, e);
+
+            if (!head) {
+                head = newNode;
+            } else {
+                Node* temp = head;
+                while (temp->next) {
+                    temp = temp->next;
+                }
+                temp->next = newNode;
+            }
+        }
+    }
+
+    // Display polynomial
+    void display() {
+        Node* temp = head;
+        while (temp) {
+            cout << temp->coeff << "x^" << temp->exp;
+            temp = temp->next;
+            if (temp) cout << " + ";
+        }
+        cout << endl;
+    }
+
+    // Add two polynomials
+    Polynomial add(Polynomial& p2) {
+        Polynomial result;
+        Node* t1 = head;
+        Node* t2 = p2.head;
+
+        while (t1 || t2) {
+            int c, e;
+            if (t1 && (!t2 || t1->exp > t2->exp)) {
+                c = t1->coeff;
+                e = t1->exp;
+                t1 = t1->next;
+            } 
+            else if (t2 && (!t1 || t2->exp > t1->exp)) {
+                c = t2->coeff;
+                e = t2->exp;
+                t2 = t2->next;
+            } 
+            else {
+                c = t1->coeff + t2->coeff;
+                e = t1->exp;
+                t1 = t1->next;
+                t2 = t2->next;
+            }
+
+            Node* newNode = new Node(c, e);
+
+            if (!result.head) {
+                result.head = newNode;
+            } else {
+                Node* temp = result.head;
+                while (temp->next) {
+                    temp = temp->next;
+                }
+                temp->next = newNode;
+            }
+        }
+
+        return result;
+    }
+};
+
+int main() {
+    cout << "Enter first polynomial:\n";
+    Polynomial poly1;
+    poly1.create();
+
+    cout << "Enter second polynomial:\n";
+    Polynomial poly2;
+    poly2.create();
+
+    cout << "\nFirst Polynomial: ";
+    poly1.display();
+
+    cout << "Second Polynomial: ";
+    poly2.display();
+
+    Polynomial result = poly1.add(poly2);
+
+    cout << "\nResultant Polynomial: ";
+    result.display();
+
+    return 0;
+}
