@@ -1,0 +1,131 @@
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int coeff, expo;
+    Node* next;
+
+    Node(int c = 0, int e = 0) {
+        coeff = c;
+        expo = e;
+        next = NULL; 
+    }
+};
+
+Node* CreatePolynomial() {
+    Node* head = NULL;
+    Node* temp = NULL;
+    int n;
+    cout << "Enter the number of terms: ";
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        int coeff, expo;
+        cout << "Enter coefficient and exponent: ";
+        cin >> coeff >> expo;
+
+        Node* newNode = new Node(coeff, expo);
+
+        if (head == NULL) {
+            head = newNode;
+            temp = head;
+        } else {
+            temp->next = newNode;
+            temp = temp->next;
+        }
+    }
+
+    return head;
+}
+
+void DisplayPolynomial(Node* head) {
+    if (head == NULL) {
+        cout << "0" << endl;
+        return;
+    }
+
+    while (head != NULL) {
+        cout << head->coeff << "x^" << head->expo;
+        head = head->next;
+        if (head != NULL) cout << " + ";
+    }
+    cout << endl;
+}
+
+void PolyaddI(Node* Head1, Node* Head2) {
+    Node* temp = NULL;
+    Node* current = NULL;
+
+    while (Head1 != NULL && Head2 != NULL) { 
+        Node* newNode = new Node();
+        
+        if (temp == NULL) {
+            temp = newNode;
+            current = temp;
+        } else {
+            current->next = newNode;
+            current = newNode;
+        }
+
+        if (Head1->expo > Head2->expo) {
+            current->expo = Head1->expo;
+            current->coeff = Head1->coeff;
+            Head1 = Head1->next;
+        } else if (Head2->expo > Head1->expo) {
+            current->expo = Head2->expo;
+            current->coeff = Head2->coeff;
+            Head2 = Head2->next;
+        } else {
+            current->expo = Head1->expo;
+            current->coeff = Head1->coeff + Head2->coeff;
+            Head1 = Head1->next;
+            Head2 = Head2->next;
+        }
+    }
+
+    while (Head1 != NULL) {
+        Node* newNode = new Node(Head1->coeff, Head1->expo);
+        current->next = newNode;
+        current = newNode;
+        Head1 = Head1->next;
+    }
+
+    while (Head2 != NULL) {
+        Node* newNode = new Node(Head2->coeff, Head2->expo);
+        current->next = newNode;
+        current = newNode;
+        Head2 = Head2->next;
+    }
+
+    // Display only the result here
+    cout << "\nResultant Polynomial: ";
+    DisplayPolynomial(temp);
+
+    // Free memory
+    Node* toDelete = temp;
+    while (toDelete != NULL) {
+        Node* nextToDelete = toDelete->next;
+        delete toDelete;
+        toDelete = nextToDelete;
+    }
+}
+
+int main() {
+    cout << "Enter the first polynomial:\n";
+    Node* Head1 = CreatePolynomial();
+
+    cout << "\nEnter the second polynomial:\n";
+    Node* Head2 = CreatePolynomial();
+
+    // Display both polynomials before addition
+    cout << "\nPolynomial 1: ";
+    DisplayPolynomial(Head1);
+    
+    cout << "Polynomial 2: ";
+    DisplayPolynomial(Head2);
+
+    PolyaddI(Head1, Head2);
+
+    return 0;
+}
