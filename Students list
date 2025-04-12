@@ -1,6 +1,5 @@
 #include <iostream>
 using namespace std;
-
 // Node structure for the linked list
 struct Student {
     int rollNo;
