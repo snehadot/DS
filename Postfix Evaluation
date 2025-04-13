@@ -1,0 +1,78 @@
+#include <iostream>
+using namespace std;
+
+const int STACK_SIZE = 10; 
+char postfix[STACK_SIZE];
+int Stack[STACK_SIZE] = {0}; 
+int TOP = -1;
+
+void PUSH(int data) {
+    if (TOP == STACK_SIZE - 1) {
+        cout << "Stack is full" << endl;
+    } else {
+        TOP++;
+        Stack[TOP] = data;
+    }
+}
+
+int POP() {
+    if (TOP == -1) {
+        cout << "Stack is empty" << endl;
+        return 0;
+    } else {
+        int n = Stack[TOP];
+        TOP--;
+        return n;
+    }
+}
+
+int isdigit(char Ch) {
+    if (Ch >= '0' && Ch <= '9') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+int main() {
+    int i, a, b, result, Bresult;
+    char ch;
+    cout << "Enter expression in postfix: ";
+    cin >> postfix;
+
+    for (i = 0; postfix[i] != '\0'; i++) {
+        ch = postfix[i];
+
+        if (isdigit(ch)) {
+            PUSH(ch - '0'); // Convert ASCII to number
+        } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+            b = POP();
+            a = POP();
+
+            switch (ch) {
+                case '+':
+                    result = a + b;
+                    break;
+                case '-':
+                    result = a - b;
+                    break;
+                case '*':
+                    result = a * b;
+                    break;
+                case '/':
+                    result = a / b;
+                    break;
+                default:
+                    cout << "Invalid operator!" << endl;
+                    return 1;
+            }
+
+            PUSH(result);
+        }
+    }
+
+    Bresult = POP();
+    cout << "Output: " << Bresult << endl;
+
+    return 0;
+}
