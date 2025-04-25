@@ -1,0 +1,224 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+class Student {
+public:
+    int rollNumber;
+    string name;
+    string course;
+    int age;
+    float payment;
+    Student* next;
+
+    Student(int roll, const string& n, const string& c, int a, float p) {
+        rollNumber = roll;
+        name = n;
+        course = c;
+        age = a;
+        payment = p;
+        next = nullptr;
+    }
+};
+
+// Function declarations
+void addStudent(Student*& head);
+void addMultipleStudents(Student*& head);
+void displayAllStudents(Student* head);
+void searchStudentByRoll(Student* head);
+void searchStudentByName(Student* head);
+void deleteStudentByRoll(Student*& head);
+void editStudentByRoll(Student* head);
+void countStudents(Student* head);
+void deleteAll(Student*& head);
+void displayMenu();
+void printBanner(const string& title);
+int getValidatedInt(const string& prompt);
+float getValidatedFloat(const string& prompt);
+string toLower(const string& s);
+void sortStudentsByName(Student*& head);
+void sortStudentsByRoll(Student*& head);
+
+// Student login function
+void studentLogin(Student* head);
+void adminLogin(Student* head);
+void login();
+
+// Helper functions
+int getValidatedInt(const string& prompt) {
+    int value;
+    while (true) {
+        cout << prompt;
+        cin >> value;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input. Please enter a number.\n";
+        } else {
+            cin.ignore();
+            return value;
+        }
+    }
+}
+
+float getValidatedFloat(const string& prompt) {
+    float value;
+    while (true) {
+        cout << prompt;
+        cin >> value;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input. Please enter a valid amount.\n";
+        } else {
+            cin.ignore();
+            return value;
+        }
+    }
+}
+
+string toLower(const string& s) {
+    string lowered = s;
+    transform(lowered.begin(), lowered.end(), lowered.begin(), ::tolower);
+    return lowered;
+}
+
+Student* findStudentByRoll(Student* head, int roll) {
+    while (head) {
+        if (head->rollNumber == roll) return head;
+        head = head->next;
+    }
+    return nullptr;
+}
+
+void studentLogin(Student* head) {
+    // Student-specific functionalities
+    int choice;
+    do {
+        cout << "\nStudent Menu:";
+        cout << "\n1. Add Student";
+        cout << "\n2. Display All Students";
+        cout << "\n3. Search Student by Roll Number";
+        cout << "\n4. Edit Student";
+        cout << "\n5. Exit";
+        cout << "\nChoose an option: ";
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            addStudent(head);
+            break;
+        case 2:
+            displayAllStudents(head);
+            break;
+        case 3:
+            searchStudentByRoll(head);
+            break;
+        case 4:
+            editStudentByRoll(head);
+            break;
+        case 5:
+            cout << "Exiting Student Menu.\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 5);
+}
+
+void adminLogin(Student* head) {
+    // Admin-specific functionalities
+    int choice;
+    do {
+        cout << "\nAdmin Menu:";
+        cout << "\n1. Add Student";
+        cout << "\n2. Display All Students";
+        cout << "\n3. Search Student by Roll Number";
+        cout << "\n4. Delete Student";
+        cout << "\n5. Count Students";
+        cout << "\n6. Exit";
+        cout << "\nChoose an option: ";
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            addStudent(head);
+            break;
+        case 2:
+            displayAllStudents(head);
+            break;
+        case 3:
+            searchStudentByRoll(head);
+            break;
+        case 4:
+            deleteStudentByRoll(head);
+            break;
+        case 5:
+            countStudents(head);
+            break;
+        case 6:
+            cout << "Exiting Admin Menu.\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 6);
+}
+
+void login() {
+    string role, password;
+    cout << "Enter Role (Student/Admin): ";
+    getline(cin >> ws, role);
+    cout << "Enter Password: ";
+    getline(cin, password);
+    if (password != "@123") {
+        cout << "Invalid password. Exiting...\n";
+        exit(0);
+    }
+    Student* head = nullptr;  // Declare an empty list for student records
+    if (toLower(role) == "student") {
+        studentLogin(head);  // Pass head to studentLogin
+    } else if (toLower(role) == "admin") {
+        adminLogin(head);  // Pass head to adminLogin
+    } else {
+        cout << "Invalid role. Exiting...\n";
+        exit(0);
+    }
+}
+
+// Code for adding, displaying, editing, and searching students (same as previously written)
+
+void displayMenu() {
+    cout << "\n--------------------------------------";
+    cout << "\n College Admission System ";
+    cout << "\n--------------------------------------";
+    cout << "\n 1. Login";
+    cout << "\n 2. Exit";
+    cout << "\n--------------------------------------";
+    cout << "\nChoose an option: ";
+}
+
+void printBanner(const string& title) {
+    cout << "\n " << title << "\n";
+    cout << string(title.length() + 6, '-') << "\n";
+}
+
+int main() {
+    int choice;
+    do {
+        displayMenu();
+        cin >> choice;
+        cin.ignore();
+        switch (choice) {
+        case 1:
+            login();
+            break;
+        case 2:
+            cout << "Exiting program.\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 2);
+    return 0;
+}
