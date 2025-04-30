@@ -1,0 +1,83 @@
+#include <iostream>
+using namespace std;
+class Node{
+    public:
+    int no1;
+    Node* next;
+    Node(){
+        no1=0;
+        next= NULL;
+        
+    }
+    Node(int data){
+        no1= data;
+        next=NULL;
+    }
+    
+};
+class Sll{
+    public:
+    Node* head;
+    Node* newNode;
+    Sll()
+    {
+        head=NULL;
+        
+    }
+    
+    void create(int data)
+    {
+        Node* newNode= new Node(data);
+        if(head == NULL){
+            head= newNode;
+        }else{
+            Node* temp = head;
+            while(temp->next!=NULL){
+                temp= temp-> next;
+            }
+           temp->next = newNode;
+            
+        } 
+    }
+    void display()
+    {
+        Node* temp= head;
+        while(temp!= NULL){
+            cout<<temp->no1<<"->";
+            temp= temp->next;        
+            
+        }
+              cout<<"NULL"<<endl;
+    }  
+    
+void FindMiddle() {
+        if (head == NULL) {
+            cout << "List is empty!" << endl;
+            return;
+        }
+
+        Node* slow = head;
+        Node* fast = head;
+
+        while (fast != NULL && fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+
+        cout << "Middle element is: " << slow->no1 << endl;
+    }
+};
+int main() {
+  Sll List;
+  List.create(30);
+  List.create(40);
+  List.create(50);
+  List.create(60);
+
+  
+  cout<<"Linked List:";
+  List.display();
+  cout<<"middle No. is: ";
+  List.FindMiddle();
+    return 0;
+}
