@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+
+class Patient {
+public:
+    string name;
+    int age;
+
+    void input() {
+        cout << "Enter patient name: ";
+        cin >> name;
+        cout << "Enter age: ";
+        cin >> age;
+    }
+
+    void display() {
+        cout << "Name: " << name << ", Age: " << age << endl;
+    }
+};
+
+class PatientRecords {
+public:
+    void bubbleSort(Patient p[], int n) {
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (p[j].name > p[j + 1].name) { // string comparison
+                    // Swap entire objects
+                    Patient temp = p[j];
+                    p[j] = p[j + 1];
+                    p[j + 1] = temp;
+                }
+            }
+        }
+    }
+
+    void displayAll(Patient p[], int n) {
+        for (int i = 0; i < n; i++) {
+            p[i].display();
+        }
+    }
+};
+
+int main() {
+    int n;
+    cout << "Enter number of patients: ";
+    cin >> n;
+
+    Patient p[n];
+    for (int i = 0; i < n; i++) {
+        cout << "\nPatient " << i + 1 << ":\n";
+        p[i].input();
+    }
+
+    PatientRecords records;
+    records.bubbleSort(p, n);
+
+    cout << "\n--- Sorted Patient Records (Alphabetical by Name) ---\n";
+    records.displayAll(p, n);
+
+    return 0;
+}
